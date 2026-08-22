@@ -1,0 +1,16 @@
+{
+  "name": "azure-room-api",
+  "version": "1.0.0",
+  "description": "Room Management Backend API using Azure Functions Node.js v4 programming model",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
