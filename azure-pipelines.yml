@@ -9,26 +9,37 @@ variables:
 
 steps:
 
-- task: NodeTool@0
+# 1. Install Node.js
+- task: UseNode@1
   inputs:
-    versionSpec: '20.x'
+    version: '20.x'
   displayName: 'Install Node.js 20'
 
+# 2. Check versions
 - script: |
     node --version
     npm --version
   displayName: 'Check Node and npm versions'
 
+# 3. Install dependencies
 - script: |
     npm ci
   workingDirectory: '$(workingDirectory)'
   displayName: 'Install dependencies'
 
+# 4. Run tests if available
 - script: |
     npm run test --if-present
   workingDirectory: '$(workingDirectory)'
   displayName: 'Run tests'
 
+# 5. Remove development-only dependencies before packaging
+- script: |
+    npm prune --omit=dev
+  workingDirectory: '$(workingDirectory)'
+  displayName: 'Prepare production dependencies'
+
+# 6. Create deployment ZIP
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(workingDirectory)'
@@ -38,9 +49,20 @@ steps:
     replaceExistingArchive: true
   displayName: 'Create Azure Function deployment package'
 
+# 7. Publish ZIP as pipeline artifact
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
   displayName: 'Publish build artifact'
+
+# 8. Deploy to Azure Function App
+- task: AzureFunctionApp@2
+  inputs:
+    azureSubscription: 'azure-function-practice-sc'
+    appType: 'functionApp'
+    appName: 'backend-azure-practice-madhu'
+    package: '$(Build.ArtifactStagingDirectory)/azure-function.zip'
+    deploymentMethod: 'auto'
+  displayName: 'Deploy to Azure Function App'
