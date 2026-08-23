@@ -30,24 +30,14 @@ app.http("getCustomers", {
     try {
       context.log("Get customers API called");
 
-      // INTENTIONAL ESLint ERROR
-      console.log(customerData);
-
-      // INTENTIONAL ESLint WARNING
-      const unusedVariable = "This variable is never used";
-
       return {
         status: 200,
         jsonBody: {
           success: true,
-
-          // INTENTIONAL ESLint ERROR
-          count: totalCustomers,
-
+          count: customers.length,
           data: customers
         }
       };
-
     } catch (error) {
       context.error("Error getting customers", error);
 
