@@ -5,12 +5,19 @@
   "main": "src/functions/*.js",
   "scripts": {
     "start": "func start",
-    "test": "node test.js"
+    "dev": "func start",
+    "test": "node test.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@azure/functions": "^4.0.0"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.0",
+    "globals": "^17.11.0"
   }
 }
