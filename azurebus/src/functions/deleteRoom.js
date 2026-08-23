@@ -3,6 +3,9 @@ const { deleteRoom } = require("../data/rooms");
 
 // HTTP Trigger API to delete a room by ID
 app.http("deleteRoom", {
+
+
+  
   methods: ["DELETE"],
   authLevel: "anonymous",
   route: "rooms/{roomId}",
