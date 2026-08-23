@@ -6,14 +6,16 @@ app.http("createRoom", {
   methods: ["POST"],
   authLevel: "anonymous",
   route: "rooms",
+
   handler: async (request, context) => {
     try {
       context.log("Create room API called");
 
       let body;
+
       try {
         body = await request.json();
-      } catch (err) {
+      } catch {
         body = null;
       }
 
@@ -27,14 +29,24 @@ app.http("createRoom", {
         };
       }
 
-      const { roomName, facilityId, temperatureMin, temperatureMax } = body;
+      const {
+        roomName,
+        facilityId,
+        temperatureMin,
+        temperatureMax
+      } = body;
 
-      // Validate required fields
       if (
-        roomName === undefined || roomName === null || roomName === "" ||
-        facilityId === undefined || facilityId === null || facilityId === "" ||
-        temperatureMin === undefined || temperatureMin === null ||
-        temperatureMax === undefined || temperatureMax === null
+        roomName === undefined ||
+        roomName === null ||
+        roomName === "" ||
+        facilityId === undefined ||
+        facilityId === null ||
+        facilityId === "" ||
+        temperatureMin === undefined ||
+        temperatureMin === null ||
+        temperatureMax === undefined ||
+        temperatureMax === null
       ) {
         return {
           status: 400,
@@ -62,6 +74,7 @@ app.http("createRoom", {
       };
     } catch (error) {
       context.error("Error creating room", error);
+
       return {
         status: 500,
         jsonBody: {
